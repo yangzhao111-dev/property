@@ -26,66 +26,22 @@ variable "tags" {
 
 # VPC
 
-## app
-
-variable "create_vpc_app" {
-  type        = bool
-  description = "Controls if VPC should be created (it affects almost all resources)"
-  default     = true
-}
-
-variable "vpc_app_azs" {
-  type        = list(string)
-  description = "A list of availability zones names or ids in the region"
-  default     = []
-}
-
-variable "vpc_app_cidr" {
-  type        = string
-  description = "The CIDR block for the VPC. Default value is a valid CIDR, but not acceptable by AWS and should be overridden"
-  default     = ""
-}
-
-variable "vpc_app_public_subnets" {
-  type        = list(string)
-  description = "A list of public subnets inside the VPC"
-  default     = []
-}
-
-variable "vpc_app_private_subnets" {
-  type        = list(string)
-  description = "A list of private subnets inside the VPC"
-  default     = []
-}
-
-## mgt
-
-variable "create_vpc_mgt" {
-  type        = bool
-  description = "Controls if VPC should be created (it affects almost all resources)"
-  default     = true
-}
-
-variable "vpc_mgt_azs" {
-  type        = list(string)
-  description = "A list of availability zones names or ids in the region"
-  default     = []
-}
-
-variable "vpc_mgt_cidr" {
-  type        = string
-  description = "The CIDR block for the VPC. Default value is a valid CIDR, but not acceptable by AWS and should be overridden"
-  default     = ""
-}
-
-variable "vpc_mgt_public_subnets" {
-  type        = list(string)
-  description = "A list of public subnets inside the VPC"
-  default     = []
-}
-
-variable "vpc_mgt_private_subnets" {
-  type        = list(string)
-  description = "A list of private subnets inside the VPC"
-  default     = []
+variable "vpcs" {
+  type = map(object({
+    # Controls if VPC should be created (it affects almost all resources)
+    create = optional(bool, true)
+    # Controls if VPC endpoints should be created
+    create_endpoints = optional(bool, true)
+    # A list of availability zones names or ids in the region
+    azs = list(string)
+    # The CIDR block for the VPC. Default value is a valid CIDR,
+    # but not acceptable by AWS and should be overridden
+    cidr = string
+    # A list of public subnets inside the VPC
+    public_subnets = list(string)
+    # A list of private subnets inside the VPC
+    private_subnets = list(string)
+  }))
+  description = "VPC variables"
+  default     = {}
 }

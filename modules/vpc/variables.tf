@@ -43,3 +43,9 @@ variable "private_subnets" {
   description = "A list of private subnets inside the VPC"
   default     = []
 }
+
+variable "create_endpoints" {
+  type        = bool
+  description = "Controls if VPC endpoints should be created"
+  default     = true
+}

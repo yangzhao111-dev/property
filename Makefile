@@ -28,11 +28,11 @@ ifneq ($(MISSING_ARGS),)
 endif
 
 .PHONY: init
-init: ## Init states
+init: check-args ## Init states
 ifeq (${UPGRADE},true)
 	$(eval OPTIONS += -upgrade)
 endif
-	@$(call terraform_cmd, init, $(ENV_VARS), $(FLAGS))
+	@$(call terraform_cmd, init, $(ENV_VARS), $(FLAGS), "-backend-config=../env/$(COUNTRY)/$(ENVIRONMENT).backend.tfvars")
 
 .PHONY: plan
 plan: check-args ## Plan resources

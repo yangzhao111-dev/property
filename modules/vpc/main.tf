@@ -1,9 +1,9 @@
 # https://registry.terraform.io/modules/terraform-aws-modules/vpc/aws/latest
 # https://github.com/terraform-aws-modules/terraform-aws-vpc
 module "vpc" {
-  count = var.create ? 1 : 0
-
   source = "terraform-aws-modules/vpc/aws"
+
+  create_vpc = var.create
 
   manage_default_vpc            = false
   create_database_subnet_group  = false
@@ -46,11 +46,11 @@ module "vpc" {
 }
 
 module "endpoints" {
-  count = var.create ? 1 : 0
-
   source = "terraform-aws-modules/vpc/aws//modules/vpc-endpoints"
 
-  vpc_id = module.vpc[0].vpc_id
+  create = var.create && var.create_endpoints
+
+  vpc_id = module.vpc.vpc_id
 
   create_security_group = false
 
@@ -59,7 +59,7 @@ module "endpoints" {
       service      = "s3"
       service_type = "Gateway"
       route_table_ids = flatten([
-        module.vpc[0].private_route_table_ids,
+        module.vpc.private_route_table_ids,
       ])
       tags = { Name = "${local.name}-vpce-s3" }
     },
@@ -67,9 +67,9 @@ module "endpoints" {
       service      = "dynamodb"
       service_type = "Gateway"
       route_table_ids = flatten([
-        module.vpc[0].private_route_table_ids,
+        module.vpc.private_route_table_ids,
       ])
-      tags   = { Name = "${local.name}-vpce-dynamodb" }
+      tags = { Name = "${local.name}-vpce-dynamodb" }
     },
   }
 

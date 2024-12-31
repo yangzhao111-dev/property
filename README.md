@@ -19,7 +19,7 @@ AWS_PROFILE=ipe-init terraform.exe apply -chdir=init
 ### init
 
 ```shell
-make init AWS_PROFILE=ipe-rootdeployer
+make init AWS_PROFILE=ipe-rootdeployer COUNTRY=us ENVIRONMENT=stage
 ```
 
 ### plan

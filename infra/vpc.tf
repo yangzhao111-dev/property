@@ -1,20 +1,35 @@
-module "vpc_app" {
+locals {
+  vpc_defaults = {
+    create          = true
+    azs             = []
+    cidr            = ""
+    public_subnets  = []
+    private_subnets = []
+  }
+}
+
+module "vpc" {
   source = "../modules/vpc"
 
-  create      = var.create_vpc_app
+  for_each = var.vpcs
+
+  create      = each.value.create
   country     = var.country
   environment = var.environment
 
-  azs  = var.vpc_app_azs
-  cidr = var.vpc_app_cidr
+  azs  = each.value.azs
+  cidr = each.value.cidr
 
-  # Public - Create One Internet Gateway across 3 azs
-  public_subnets = var.vpc_app_public_subnets
-
-  # Private - No NAT Gateway & No Internet access
-  private_subnets = var.vpc_app_private_subnets
+  public_subnets  = each.value.public_subnets
+  private_subnets = each.value.private_subnets
 
   tags = merge(local.tags, {
-    "vpc:type" = "app"
+    "vpc:type" = "${each.key}"
   })
+}
+
+output "vpc" {
+  value = {
+    for idx, vpc in module.vpc : idx => vpc.values
+  }
 }
