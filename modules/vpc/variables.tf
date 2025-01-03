@@ -1,13 +1,3 @@
-variable "country" {
-  type        = string
-  description = "Country name: [us]"
-}
-
-variable "environment" {
-  type        = string
-  description = "Environment name: [dev, stage, prod]"
-}
-
 variable "tags" {
   description = "Tags"
   type        = map(string)
@@ -20,6 +10,11 @@ variable "create" {
   type        = bool
   description = "Controls if VPC should be created (it affects almost all resources)"
   default     = true
+}
+
+variable "name" {
+  type        = string
+  description = "Name to be used on all the resources as identifier"
 }
 
 variable "azs" {

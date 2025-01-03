@@ -13,9 +13,8 @@ module "vpc" {
 
   for_each = var.vpcs
 
-  create      = each.value.create
-  country     = var.country
-  environment = var.environment
+  create = each.value.create
+  name   = "${var.environment}-${var.country}-${each.key}"
 
   azs  = each.value.azs
   cidr = each.value.cidr

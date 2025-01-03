@@ -11,7 +11,7 @@ module "vpc" {
   manage_default_route_table    = false
   manage_default_security_group = false
 
-  name = local.name
+  name = var.name
   azs  = var.azs
   cidr = var.cidr
 
@@ -28,7 +28,7 @@ module "vpc" {
   tags = merge(var.tags, local.tags)
 
   vpc_tags = {
-    Name = "${local.name}-vpc"
+    Name = "${var.name}-vpc"
   }
 
   public_subnet_names   = local.public_subnet_names
@@ -37,11 +37,11 @@ module "vpc" {
   private_subnet_suffix = local.private_subnet_suffix
 
   nat_gateway_tags = {
-    Name = "${local.name}-natgw"
+    Name = "${var.name}-natgw"
   }
 
   igw_tags = {
-    Name = "${local.name}-igw"
+    Name = "${var.name}-igw"
   }
 }
 
@@ -61,7 +61,7 @@ module "endpoints" {
       route_table_ids = flatten([
         module.vpc.private_route_table_ids,
       ])
-      tags = { Name = "${local.name}-vpce-s3" }
+      tags = { Name = "${var.name}-vpce-s3" }
     },
     dynamodb = {
       service      = "dynamodb"
@@ -69,7 +69,7 @@ module "endpoints" {
       route_table_ids = flatten([
         module.vpc.private_route_table_ids,
       ])
-      tags = { Name = "${local.name}-vpce-dynamodb" }
+      tags = { Name = "${var.name}-vpce-dynamodb" }
     },
   }
 
