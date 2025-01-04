@@ -77,12 +77,14 @@ variable "acms" {
 variable "asgs" {
   description = "ASG variables"
   type = map(object({
-    create        = optional(bool, true)
-    image_id      = optional(string, "")
-    instance_type = optional(string, "")
-    min_size      = optional(number, 1)
-    max_size      = optional(number, 1)
-    disk_size_gb  = optional(number, 10)
+    create         = optional(bool, true)
+    image_id       = optional(string, "")
+    instance_type  = optional(string, "")
+    min_size       = optional(number, 1)
+    max_size       = optional(number, 1)
+    disk_size_gb   = optional(number, 10)
+    create_ssh_key = optional(bool, false)
+    ssh_key_name   = optional(string, "")
   }))
   default = {}
 }

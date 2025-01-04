@@ -21,6 +21,9 @@ module "asg" {
   vpc_id                = module.vpc[each.key].values.id
   alb_security_group_id = module.alb[each.key].values.security_group_id
 
+  create_ssh_key = each.value.create_ssh_key
+  ssh_key_name   = each.value.ssh_key_name
+
   tags = merge(local.tags, var.tags, {
     "asg:type" = "${each.key}"
   })
@@ -28,6 +31,13 @@ module "asg" {
 
 output "asg" {
   value = {
-    for idx, vpc in module.asg : idx => asg.values
+    for idx, asg in module.asg : idx => asg.values
   }
+}
+
+output "asg_ssh_private_key" {
+  value = {
+    for idx, asg in module.asg : idx => asg.ssh_private_key
+  }
+  sensitive = true
 }

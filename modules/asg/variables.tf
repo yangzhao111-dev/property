@@ -77,3 +77,17 @@ variable "alb_security_group_id" {
   description = "The ID of the ALB security group."
   type        = string
 }
+
+# SSH
+
+variable "create_ssh_key" {
+  description = "Create SSH key or not"
+  type        = bool
+  default     = false
+}
+
+variable "ssh_key_name" {
+  description = "SSH key name"
+  type        = string
+  default     = ""
+}
