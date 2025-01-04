@@ -1,3 +1,5 @@
+# https://registry.terraform.io/modules/terraform-aws-modules/alb/aws/latest
+# https://github.com/terraform-aws-modules/terraform-aws-alb
 module "alb" {
   source  = "terraform-aws-modules/alb/aws"
   version = "~> 9.0"

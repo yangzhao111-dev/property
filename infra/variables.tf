@@ -71,3 +71,18 @@ variable "acms" {
   }))
   default = {}
 }
+
+# ASG
+
+variable "asgs" {
+  description = "ASG variables"
+  type = map(object({
+    create        = optional(bool, true)
+    image_id      = optional(string, "")
+    instance_type = optional(string, "")
+    min_size      = optional(number, 1)
+    max_size      = optional(number, 1)
+    disk_size_gb  = optional(number, 10)
+  }))
+  default = {}
+}

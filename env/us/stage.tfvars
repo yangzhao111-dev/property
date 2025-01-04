@@ -64,3 +64,13 @@ acms = {
     ]
   }
 }
+
+# ASG
+
+asgs = {
+  app = {
+    image_id      = "ami-05d38da78ce859165" // Ubuntu 24.04 x86
+    instance_type = "t3a.nano"
+    disk_size_gb  = 20
+  }
+}

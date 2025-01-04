@@ -74,7 +74,7 @@ module "alb" {
     }
   }
 
-  tags = merge(local.tags, {
+  tags = merge(local.tags, var.tags, {
     "alb:type" = "${each.key}"
   })
 }

@@ -8,7 +8,7 @@ module "acm" {
   create       = each.value.create
   domain_names = each.value.domain_names
 
-  tags = merge(var.tags, local.tags)
+  tags = merge(local.tags, var.tags)
 }
 
 output "acm" {
