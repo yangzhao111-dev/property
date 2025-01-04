@@ -1,6 +1,6 @@
 # Backend
 
 region         = "us-west-2"
-bucket         = "ipropertyexpress-tfsates"
+bucket         = "ipropertyexpress-tfstates"
 key            = "us/stage/tf.tfstate"
-dynamodb_table = "ipropertyexpress-tfsates-locktable"
+dynamodb_table = "ipropertyexpress-tfstates-locktable"

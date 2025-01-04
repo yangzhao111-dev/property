@@ -45,3 +45,18 @@ vpcs = {
     ]
   }
 }
+
+# ALB
+
+albs = {
+  app = {
+    backend_port = 8080
+  }
+}
+
+# ACM
+
+cert_domain_names = [
+  "*.stage.ipropertyexpress.com",
+  "*.ipropertyexpress.com",
+]

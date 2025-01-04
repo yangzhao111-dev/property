@@ -1,7 +1,8 @@
 # https://registry.terraform.io/modules/terraform-aws-modules/vpc/aws/latest
 # https://github.com/terraform-aws-modules/terraform-aws-vpc
 module "vpc" {
-  source = "terraform-aws-modules/vpc/aws"
+  source  = "terraform-aws-modules/vpc/aws"
+  version = "~> 5.0"
 
   create_vpc = var.create
 

@@ -6,7 +6,7 @@ resource "aws_s3_bucket" "this" {
   bucket = var.bucket_name
 
   lifecycle {
-    prevent_destroy = false
+    prevent_destroy = true
   }
 
   tags = merge(var.tags, local.tags, {

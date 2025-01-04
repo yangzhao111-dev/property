@@ -1,21 +1,21 @@
 variable "country" {
-  type        = string
   description = "Country name: [us]"
+  type        = string
 }
 
 variable "environment" {
-  type        = string
   description = "Environment name: [dev, stage, prod]"
+  type        = string
 }
 
 variable "aws_account_id" {
-  type        = string
   description = "AWS account ID"
+  type        = string
 }
 
 variable "aws_region" {
-  type        = string
   description = "AWS region"
+  type        = string
 }
 
 variable "tags" {
@@ -27,6 +27,7 @@ variable "tags" {
 # VPC
 
 variable "vpcs" {
+  description = "VPC variables"
   type = map(object({
     # Controls if VPC should be created (it affects almost all resources)
     create = optional(bool, true)
@@ -42,6 +43,27 @@ variable "vpcs" {
     # A list of private subnets inside the VPC
     private_subnets = list(string)
   }))
-  description = "VPC variables"
-  default     = {}
+  default = {}
+}
+
+# ALB
+
+variable "albs" {
+  description = "ALB variables"
+  type = map(object({
+    # Controls if ALB should be created (it affects almost all resources)
+    create = optional(bool, true)
+    # Controls deletion protection of the load balancer
+    enable_deletion_protection = optional(bool, false)
+    # TCP port of backend service
+    backend_port = optional(number, 80)
+  }))
+  default = {}
+}
+
+# ACM
+
+variable "cert_domain_names" {
+  description = "Domain names for certificate"
+  type        = list(string)
 }
