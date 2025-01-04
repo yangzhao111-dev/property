@@ -63,7 +63,11 @@ variable "albs" {
 
 # ACM
 
-variable "cert_domain_names" {
-  description = "Domain names for certificate"
-  type        = list(string)
+variable "acms" {
+  description = "ACM certificate variables"
+  type = map(object({
+    create       = optional(bool, true)
+    domain_names = optional(list(string), [])
+  }))
+  default = {}
 }

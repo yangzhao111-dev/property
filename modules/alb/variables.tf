@@ -4,7 +4,7 @@ variable "tags" {
   default     = {}
 }
 
-# ELB
+# ALB
 
 variable "create" {
   description = "Controls if resources should be created (affects nearly all resources)"

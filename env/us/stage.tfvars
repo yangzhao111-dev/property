@@ -56,7 +56,11 @@ albs = {
 
 # ACM
 
-cert_domain_names = [
-  "*.stage.ipropertyexpress.com",
-  "*.ipropertyexpress.com",
-]
+acms = {
+  stage = {
+    domain_names = [
+      "*.stage.ipropertyexpress.com",
+      "*.ipropertyexpress.com",
+    ]
+  }
+}
