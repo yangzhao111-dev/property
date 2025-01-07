@@ -6,9 +6,9 @@ module "alb" {
   create = each.value.create
   name   = "${local.alb_name_prefix}-${each.key}"
 
-  vpc_id         = module.vpc[each.key].values.id
-  vpc_cidr       = module.vpc[each.key].values.cidr
-  public_subnets = module.vpc[each.key].values.public_subnets
+  vpc_id         = module.vpc[each.value.vpc_key].values.id
+  vpc_cidr       = module.vpc[each.value.vpc_key].values.cidr
+  public_subnets = module.vpc[each.value.vpc_key].values.public_subnets
 
   enable_deletion_protection = each.value.enable_deletion_protection
 

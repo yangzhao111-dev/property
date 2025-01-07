@@ -49,8 +49,13 @@ vpcs = {
 # ALB
 
 albs = {
-  app = {
+  app-nodejs = {
     backend_port = 8080
+    vpc_key      = "app"
+  }
+  app-web = {
+    backend_port = 8080
+    vpc_key      = "app"
   }
 }
 
@@ -68,9 +73,20 @@ acms = {
 # ASG
 
 asgs = {
-  app = {
-    image_id      = "ami-05d38da78ce859165" // Ubuntu 24.04 x86
-    instance_type = "t3a.nano"
+  app-nodejs = {
+    image_id      = "ami-0e32864a4910bd3a9" // Ubuntu 24.04 x86
+    instance_type = "t3a.medium"
     disk_size_gb  = 20
+    ssh_key_name  = "instance-access-key" // manuall add key pair
+    vpc_key       = "app"
+    alb_key       = "app-nodejs"
+  }
+  app-web = {
+    image_id      = "ami-0e32864a4910bd3a9" // Ubuntu 24.04 x86
+    instance_type = "t3a.medium"
+    disk_size_gb  = 20
+    ssh_key_name  = "instance-access-key" // manuall add key pair
+    vpc_key       = "app"
+    alb_key       = "app-web"
   }
 }

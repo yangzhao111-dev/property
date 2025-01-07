@@ -1,0 +1,57 @@
+resource "aws_eip" "app_db_ip" {
+  vpc      = true
+  instance = aws_instance.bastion.id
+}
+
+resource "aws_instance" "app-db" {
+  ami                    = "ami-0e32864a4910bd3a9"
+  instance_type          = "t2.micro"
+  subnet_id              = module.vpc["app"].values.public_subnets.id
+  vpc_security_group_ids = [aws_security_group.this_db.id]
+
+  tags = {
+    Name = "app-db"
+  }
+}
+
+
+resource "aws_security_group" "this_db" {
+  name        = "${local.ec2_name_prefix}-app-db"
+  description = "App DB ec2 instance security grpu"
+  vpc_id      = module.vpc["app"].values.id
+
+  ingress {
+    description = "SSH from Management VPC"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = [module.vpc["app"].values.cidr]
+  }
+
+#   ingress {
+#     description     = "Traffic from ALB ${var.name}"
+#     from_port       = 0
+#     to_port         = 0
+#     protocol        = "-1"
+#     security_groups = [var.alb_security_group_id]
+#   }
+
+  ingress {
+    description = "Traffic from self"
+    from_port   = 0
+    to_port     = 0
+    protocol    = -1
+    self        = true
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = merge(local.tags, {
+    Name = "${local.ec2_name_prefix}-bastion"
+  })
+}

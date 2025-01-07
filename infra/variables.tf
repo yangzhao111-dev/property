@@ -57,6 +57,7 @@ variable "albs" {
     enable_deletion_protection = optional(bool, false)
     # TCP port of backend service
     backend_port = optional(number, 80)
+    vpc_key      = optional(string, "")
   }))
   default = {}
 }
@@ -85,6 +86,8 @@ variable "asgs" {
     disk_size_gb   = optional(number, 10)
     create_ssh_key = optional(bool, false)
     ssh_key_name   = optional(string, "")
+    vpc_key        = optional(string, "")
+    alb_key        = optional(string, "")
   }))
   default = {}
 }

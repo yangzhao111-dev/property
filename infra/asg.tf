@@ -13,13 +13,13 @@ module "asg" {
   max_size      = each.value.max_size
   disk_size_gb  = each.value.disk_size_gb
 
-  private_subnets = module.vpc[each.key].values.private_subnets
+  private_subnets = module.vpc[each.value.vpc_key].values.private_subnets
 
-  target_group_arn = module.alb[each.key].values.target_groups.ex_asg.arn
+  target_group_arn = module.alb[each.value.alb_key].values.target_groups.ex_asg.arn
 
   management_vpc_cidr   = module.vpc.mgt.values.cidr
-  vpc_id                = module.vpc[each.key].values.id
-  alb_security_group_id = module.alb[each.key].values.security_group_id
+  vpc_id                = module.vpc[each.value.vpc_key].values.id
+  alb_security_group_id = module.alb[each.value.alb_key].values.security_group_id
 
   create_ssh_key = each.value.create_ssh_key
   ssh_key_name   = each.value.ssh_key_name
