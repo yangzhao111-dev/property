@@ -6,9 +6,9 @@
 > * Use `aws configure --profile ipe-init` to set up AWS ak/sk
 
 ```shell
-AWS_PROFILE=ipe-init terraform.exe -chdir=init init
-AWS_PROFILE=ipe-init terraform.exe -chdir=init plan
-AWS_PROFILE=ipe-init terraform.exe -chdir=init apply
+AWS_PROFILE=ipe-init terraform.exe init -chdir=init
+AWS_PROFILE=ipe-init terraform.exe plan -chdir=init
+AWS_PROFILE=ipe-init terraform.exe apply -chdir=init
 ```
 > Generate the AWS ak/sk of the deploy user(`ipe-rootdeployer`) after the apply
 

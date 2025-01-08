@@ -88,3 +88,29 @@ variable "asgs" {
   }))
   default = {}
 }
+
+# S3 bucket
+variable "s3_buckets" {
+  description = "A map of S3 bucket configurations"
+  type = map(object({
+    bucket_name     = string
+    acl             = string
+    lifecycle_rules = list(object({
+      id         = string
+      enabled    = bool
+      expiration = object({
+        days = optional(number) # 可选字段，允许为 null
+      })
+      transition = list(object({
+        days          = number
+        storage_class = string
+      }))
+      filter = object({
+        prefix = optional(string) # 可选字段，允许为空
+      })
+    }))
+  }))
+}
+
+
+
