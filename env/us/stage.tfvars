@@ -5,6 +5,75 @@ environment    = "stage"
 aws_account_id = "539247459406"
 aws_region     = "us-west-2"
 
+
+# ASG
+
+asgs = {
+  app-nodejs = {
+    image_id      = "ami-0e32864a4910bd3a9" // Windows 2025
+    instance_type = "t3.medium"
+    disk_size_gb  = 30
+    ssh_key_name  = "instance-access-key" // manuall add key pair
+    vpc_key       = "app"
+    alb_key       = "app-nodejs"
+  }
+  app-web = {
+    image_id      = "ami-0e32864a4910bd3a9" // Windows 2025
+    instance_type = "t3.medium"
+    disk_size_gb  = 30
+    ssh_key_name  = "instance-access-key" // manuall add key pair
+    vpc_key       = "app"
+    alb_key       = "app-web"
+  }
+}
+
+#EC2
+
+
+ec2s = {
+  app-bastion = {
+    image_id      = "ami-0e32864a4910bd3a9" // Windows 2025
+    instance_type = "t3.medium"
+    disk_size_gb  = 70
+    ssh_key_name  = "instance-access-key" // manuall add key pair
+    vpc_key       = "mgt"
+    is_public     = true
+  }
+  app-web = {
+    image_id      = "ami-0e32864a4910bd3a9" // Windows 2025
+    instance_type = "t3.medium"
+    disk_size_gb  = 60
+    ssh_key_name  = "instance-access-key" // manuall add key pair
+    vpc_key       = "app"
+    is_public     = false
+  }
+}
+
+
+# ALB
+
+albs = {
+  app-nodejs = {
+    backend_port = 8080
+    vpc_key      = "app"
+  }
+  app-web = {
+    backend_port = 8080
+    vpc_key      = "app"
+  }
+}
+
+# ACM
+
+acms = {
+  stage = {
+    domain_names = [
+      "*.stage.ipropertyexpress.com",
+      "*.ipropertyexpress.com",
+    ]
+  }
+}
+
 # VPC
 
 vpcs = {
@@ -46,15 +115,6 @@ vpcs = {
   }
 }
 
-# ALB
-
-albs = {
-  app = {
-    backend_port = 8080
-  }
-}
-
-# ACM
 
 acms = {
   stage = {
@@ -195,9 +255,5 @@ s3_buckets = {
     ]
   }
 }
-
-
-
-
 
 
