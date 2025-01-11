@@ -96,10 +96,19 @@ variable "ssh_key_name" {
   default     = ""
 }
 
-
 variable "is_public" {
   description = "is public"
   type        = bool
   default     = false
 }
 
+variable "security_group_ingress_cidr_rules" {
+  description = "Public cidrs for remote access"
+  type = list(object({
+    description = string
+    cidr_block  = string
+    port        = number
+    ip_protocol = optional(string, "tcp")
+  }))
+  default = []
+}

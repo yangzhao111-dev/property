@@ -5,6 +5,46 @@ environment    = "stage"
 aws_account_id = "539247459406"
 aws_region     = "us-west-2"
 
+# VPC
+
+vpcs = {
+  app = {
+    azs = [
+      "us-west-2a",
+      "us-west-2b",
+      "us-west-2c",
+    ]
+    cidr = "10.91.0.0/16"
+    public_subnets = [
+      "10.91.0.0/24",
+      "10.91.1.0/24",
+      "10.91.2.0/24",
+    ]
+    private_subnets = [
+      "10.91.96.0/21",
+      "10.91.104.0/21",
+      "10.91.112.0/21",
+    ],
+  }
+  mgt = {
+    azs = [
+      "us-west-2a",
+      "us-west-2b",
+      "us-west-2c",
+    ]
+    cidr = "10.21.0.0/16"
+    public_subnets = [
+      "10.21.0.0/24",
+      "10.21.1.0/24",
+      "10.21.2.0/24",
+    ]
+    private_subnets = [
+      "10.21.96.0/21",
+      "10.21.104.0/21",
+      "10.21.112.0/21",
+    ],
+  }
+}
 
 # ASG
 
@@ -29,7 +69,6 @@ asgs = {
 
 #EC2
 
-
 ec2s = {
   app-bastion = {
     image_id      = "ami-0e32864a4910bd3a9" // Windows 2025
@@ -38,8 +77,50 @@ ec2s = {
     ssh_key_name  = "instance-access-key" // manuall add key pair
     vpc_key       = "mgt"
     is_public     = true
+    security_group_ingress_cidr_rules = [
+      {
+        description = "Michael home"
+        cidr_block  = "106.71.18.220/32"
+        port        = 3389
+      },
+      {
+        description = "Jeff on the go"
+        cidr_block  = "1.145.95.24/32"
+        port        = 3389
+      },
+      {
+        description = "Kaijun Home"
+        cidr_block  = "49.176.239.94/32"
+        port        = 3389
+      },
+      {
+        description = "Jeff home (cheadle)"
+        cidr_block  = "101.181.86.108/32"
+        port        = 3389
+      },
+      {
+        description = "JK Home 2 (rose)"
+        cidr_block  = "144.132.239.218/32"
+        port        = 3389
+      },
+      {
+        description = "ML"
+        cidr_block  = "61.69.159.127/32"
+        port        = 3389
+      },
+      {
+        description = "Unlabeled IP"
+        cidr_block  = "203.45.19.80/32"
+        port        = 3389
+      },
+      {
+        description = "good"
+        cidr_block  = "13.211.109.81/32"
+        port        = 3389
+      },
+    ]
   }
-  app-web = {
+  rds = {
     image_id      = "ami-0e32864a4910bd3a9" // Windows 2025
     instance_type = "t3.medium"
     disk_size_gb  = 60
@@ -48,7 +129,6 @@ ec2s = {
     is_public     = false
   }
 }
-
 
 # ALB
 
@@ -65,6 +145,7 @@ albs = {
 
 # ACM
 
+/*
 acms = {
   stage = {
     domain_names = [
@@ -73,55 +154,16 @@ acms = {
     ]
   }
 }
-
-# VPC
-
-vpcs = {
-  app = {
-    azs = [
-      "us-west-2a",
-      "us-west-2b",
-      "us-west-2c",
-    ]
-    cidr = "10.91.0.0/16"
-    public_subnets = [
-      "10.91.0.0/24",
-      "10.91.1.0/24",
-      "10.91.2.0/24",
-    ]
-    private_subnets = [
-      "10.91.96.0/21",
-      "10.91.104.0/21",
-      "10.91.112.0/21",
-    ]
-  }
-  mgt = {
-    azs = [
-      "us-west-2a",
-      "us-west-2b",
-      "us-west-2c",
-    ]
-    cidr = "10.21.0.0/16"
-    public_subnets = [
-      "10.21.0.0/24",
-      "10.21.1.0/24",
-      "10.21.2.0/24",
-    ]
-    private_subnets = [
-      "10.21.96.0/21",
-      "10.21.104.0/21",
-      "10.21.112.0/21",
-    ]
-  }
-}
-
+*/
 
 # S3 buckets
 
 s3_buckets = {
-  ipx_prod_backups = {
-    bucket_name = "ipx.prod.backups"
-    acl         = "private"
+  backups = {
+    bucket_name              = "backups"
+    control_object_ownership = true
+    object_ownership         = "ObjectWriter"
+    acl                      = "private"
     lifecycle_rules = [
       {
         id         = "DB Backup.DeleteAfter7days"
@@ -144,7 +186,7 @@ s3_buckets = {
         transition = [
           { days = 2, storage_class = "DEEP_ARCHIVE" }
         ]
-        filter     = { prefix = "Glacier/" }
+        filter = { prefix = "Glacier/" }
       },
       {
         id         = "misc to one zone IA"
@@ -153,13 +195,15 @@ s3_buckets = {
         transition = [
           { days = 30, storage_class = "ONEZONE_IA" }
         ]
-        filter     = { prefix = "misc/" }
+        filter = { prefix = "misc/" }
       }
     ]
   },
-  ipx_prod_cldfiles = {
-    bucket_name = "ipx.prod.cldfiles"
-    acl         = "private"
+  cldfiles = {
+    bucket_name              = "cldfiles"
+    control_object_ownership = true
+    object_ownership         = "ObjectWriter"
+    acl                      = "private"
     lifecycle_rules = [
       {
         id         = "TransitionToAI"
@@ -168,13 +212,15 @@ s3_buckets = {
         transition = [
           { days = 30, storage_class = "STANDARD_IA" }
         ]
-        filter     = {} # 无 prefix
+        filter = {} # 无 prefix
       }
     ]
   },
-  ipx_prod_sync = {
-    bucket_name = "ipx.prod.sync"
-    acl         = "private"
+  sync = {
+    bucket_name              = "sync"
+    control_object_ownership = true
+    object_ownership         = "ObjectWriter"
+    acl                      = "private"
     lifecycle_rules = [
       {
         id         = "auto-delete-after-30-days"
@@ -185,9 +231,11 @@ s3_buckets = {
       }
     ]
   },
-  ipx_prod_transit = {
-    bucket_name = "ipx.prod.transit"
-    acl         = "private"
+  transit = {
+    bucket_name              = "transit"
+    control_object_ownership = true
+    object_ownership         = "ObjectWriter"
+    acl                      = "private"
     lifecycle_rules = [
       {
         id         = "auto-delete-after-200-days"
@@ -198,9 +246,11 @@ s3_buckets = {
       }
     ]
   },
-  ipx_prod = {
-    bucket_name = "ipx.prod"
-    acl         = "private"
+  main = {
+    bucket_name              = "main"
+    control_object_ownership = true
+    object_ownership         = "ObjectWriter"
+    acl                      = "private"
     lifecycle_rules = [
       {
         id         = "TransitionToAI2018"
@@ -209,7 +259,7 @@ s3_buckets = {
         transition = [
           { days = 30, storage_class = "STANDARD_IA" }
         ]
-        filter     = {} # 无 prefix
+        filter = {} # 无 prefix
       },
       {
         id         = "sqs-delete"
@@ -220,9 +270,11 @@ s3_buckets = {
       }
     ]
   },
-  ipx_saleswebsite = {
-    bucket_name = "ipx.saleswebsite"
-    acl         = "private"
+  saleswebsite = {
+    bucket_name              = "saleswebsite"
+    control_object_ownership = true
+    object_ownership         = "ObjectWriter"
+    acl                      = "private"
     lifecycle_rules = [
       {
         id         = "TransitionToAI2018"
@@ -231,10 +283,47 @@ s3_buckets = {
         transition = [
           { days = 30, storage_class = "STANDARD_IA" }
         ]
-        filter     = {} # 无 prefix
+        filter = {} # 无 prefix
       }
     ]
   }
 }
 
+# tgw
 
+tgw = {
+  amazon_side_asn             = 4200010001
+  transit_gateway_cidr_blocks = ["10.99.0.0/24"]
+}
+
+// key is VPC key
+tgw_attached_vpcs = {
+  mgt = {
+    tgw_routes = [
+      {
+        destination_cidr_block = "10.91.0.0/16"
+      },
+    ]
+  }
+  app = {
+    tgw_routes = [
+      {
+        destination_cidr_block = "10.21.0.0/16"
+      },
+    ]
+  }
+}
+
+// key is VPC key
+extra_route_tables_for_tgw = {
+  mgt = {
+    cidrs = [
+      "10.91.0.0/16",
+    ]
+  },
+  app = {
+    cidrs = [
+      "10.21.0.0/16",
+    ]
+  },
+}

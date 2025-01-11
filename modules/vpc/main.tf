@@ -28,14 +28,21 @@ module "vpc" {
 
   tags = merge(var.tags, local.tags)
 
-  vpc_tags = {
+  vpc_tags = merge(var.vpc_tags, {
     Name = "${var.name}-vpc"
-  }
+  })
 
   public_subnet_names   = local.public_subnet_names
   private_subnet_names  = local.private_subnet_names
   public_subnet_suffix  = local.public_subnet_suffix
   private_subnet_suffix = local.private_subnet_suffix
+
+  public_subnet_tags = {
+    "vpc:public" : "true"
+  }
+  private_subnet_tags = {
+    "vpc:private" : "true"
+  }
 
   nat_gateway_tags = {
     Name = "${var.name}-natgw"

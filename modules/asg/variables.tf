@@ -73,6 +73,11 @@ variable "vpc_id" {
   type        = string
 }
 
+variable "vpc_cidr" {
+  description = "The cidr for the VPC."
+  type        = string
+}
+
 variable "alb_security_group_id" {
   description = "The ID of the ALB security group."
   type        = string

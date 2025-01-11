@@ -12,6 +12,8 @@ module "vpc" {
   public_subnets  = each.value.public_subnets
   private_subnets = each.value.private_subnets
 
+  vpc_tags = each.value.vpc_tags
+
   tags = merge(local.tags, var.tags, {
     "vpc:type" = "${each.key}"
   })

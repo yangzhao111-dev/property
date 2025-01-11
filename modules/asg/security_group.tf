@@ -5,9 +5,9 @@ resource "aws_security_group" "this" {
   vpc_id      = var.vpc_id
 
   ingress {
-    description = "SSH from Management VPC"
-    from_port   = 22
-    to_port     = 22
+    description = "Remote access from Management VPC"
+    from_port   = 3389
+    to_port     = 3389
     protocol    = "tcp"
     cidr_blocks = [var.management_vpc_cidr]
   }
@@ -21,10 +21,18 @@ resource "aws_security_group" "this" {
   }
 
   ingress {
+    description = "Traffic from self VPC"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = [var.vpc_cidr]
+  }
+
+  ingress {
     description = "Traffic from self ${var.name}"
     from_port   = 0
     to_port     = 0
-    protocol    = -1
+    protocol    = "-1"
     self        = true
   }
 

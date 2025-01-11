@@ -12,6 +12,12 @@ variable "create" {
   default     = true
 }
 
+variable "vpc_tags" {
+  description = "Tags"
+  type        = map(string)
+  default     = {}
+}
+
 variable "name" {
   description = "Name to be used on all the resources as identifier"
   type        = string

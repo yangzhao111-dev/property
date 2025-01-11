@@ -9,7 +9,7 @@ module "ec2" {
   instance_type          = var.instance_type
   ami                    = var.image_id
   # monitoring             = true
-  vpc_security_group_ids = [aws_security_group.this_ec2.id]
+  vpc_security_group_ids = [aws_security_group.this.id]
   subnet_id              = var.subnet_id
   key_name               = var.ssh_key_name
 

@@ -36,8 +36,31 @@ make apply AWS_PROFILE=ipe-rootdeployer COUNTRY=us ENVIRONMENT=stage
 # make apply AWS_PROFILE=ipe-rootdeployer COUNTRY=us ENVIRONMENT=stage APPROVE=true
 ```
 
+### output
+
+```shell
+make output AWS_PROFILE=ipe-rootdeployer COUNTRY=us ENVIRONMENT=stage
+```
+
 ### destroy
 
 ```shell
 make destroy AWS_PROFILE=ipe-rootdeployer COUNTRY=us ENVIRONMENT=stage
+```
+
+## Transit Gateway cross account peer
+
+> Perform Transit Gateway deployment after multiple VPC deployments is complete
+
+```shell
+# init
+make init AWS_PROFILE=ipe-rootdeployer VPC_TGW=true
+# plan
+make plan AWS_PROFILE=ipe-rootdeployer VPC_TGW=true
+# apply
+make apply AWS_PROFILE=ipe-rootdeployer VPC_TGW=true
+# output
+make output AWS_PROFILE=ipe-rootdeployer VPC_TGW=true
+# destroy
+make destroy AWS_PROFILE=ipe-rootdeployer VPC_TGW=true
 ```

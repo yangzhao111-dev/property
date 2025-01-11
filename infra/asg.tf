@@ -19,6 +19,7 @@ module "asg" {
 
   management_vpc_cidr   = module.vpc.mgt.values.cidr
   vpc_id                = module.vpc[each.value.vpc_key].values.id
+  vpc_cidr              = module.vpc[each.value.vpc_key].values.cidr
   alb_security_group_id = module.alb[each.value.alb_key].values.security_group_id
 
   create_ssh_key = each.value.create_ssh_key

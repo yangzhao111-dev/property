@@ -42,6 +42,7 @@ variable "vpcs" {
     public_subnets = list(string)
     # A list of private subnets inside the VPC
     private_subnets = list(string)
+    vpc_tags        = optional(map(string), {})
   }))
   default = {}
 }
@@ -104,6 +105,12 @@ variable "ec2s" {
     vpc_key       = optional(string, "")
     alb_key       = optional(string, "")
     is_public     = optional(bool, false)
+    security_group_ingress_cidr_rules = optional(list(object({
+      description = string
+      cidr_block  = string
+      port        = number
+      ip_protocol = optional(string, "tcp")
+    })), [])
   }))
   default = {}
 }
@@ -112,24 +119,53 @@ variable "ec2s" {
 variable "s3_buckets" {
   description = "A map of S3 bucket configurations"
   type = map(object({
-    bucket_name     = string
-    acl             = string
+    bucket_name              = string
+    control_object_ownership = optional(bool, false)
+    object_ownership         = optional(string, "BucketOwnerEnforced")
+    acl                      = string
     lifecycle_rules = list(object({
-      id         = string
-      enabled    = bool
+      id      = string
+      enabled = bool
       expiration = object({
-        days = optional(number) # 可选字段，允许为 null
+        days = optional(number, null) # 可选字段，允许为 null
       })
       transition = list(object({
         days          = number
         storage_class = string
       }))
       filter = object({
-        prefix = optional(string) # 可选字段，允许为空
+        prefix = optional(string, "") # 可选字段，允许为空
       })
     }))
   }))
 }
 
+# tgw
 
+variable "tgw" {
+  description = "Transit gateway variables"
+  type = object({
+    amazon_side_asn             = number
+    transit_gateway_cidr_blocks = list(string)
+  })
+}
 
+variable "tgw_attached_vpcs" {
+  description = "Transit gateway vpc attachments variables"
+  type = map(object({
+    tgw_routes = list(object({
+      destination_cidr_block = string
+      is_public              = optional(bool, false)
+    }))
+  }))
+  default = {}
+}
+
+variable "extra_route_tables_for_tgw" {
+  description = "Extra route tables for transit gateway"
+  type = map(object({
+    cidrs     = list(string)
+    is_public = optional(bool, false)
+  }))
+  default = {}
+}
