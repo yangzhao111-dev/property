@@ -91,3 +91,19 @@ variable "asgs" {
   }))
   default = {}
 }
+
+
+variable "ec2s" {
+  description = "ASG variables"
+  type = map(object({
+    create        = optional(bool, true)
+    image_id      = optional(string, "") // Windows 2025
+    instance_type = optional(string, "")
+    disk_size_gb  = optional(number, 60)
+    ssh_key_name  = optional(string, "") // manuall add key pair
+    vpc_key       = optional(string, "")
+    alb_key       = optional(string, "")
+    is_public     = optional(bool, false)
+  }))
+  default = {}
+}

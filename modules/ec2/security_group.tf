@@ -35,7 +35,7 @@ resource "aws_security_group" "this_ec2" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  tags = merge(local.tags, {
+  tags = merge(var.tags, {
     Name = "${var.name}-asg-node-sg"
   })
 }

@@ -61,21 +61,25 @@ variable "management_vpc_cidr" {
 variable "app_vpc_cidr" {
   description = "The CIDR block for the APP VPC."
   type        = string
+  default     = ""
 }
 
 variable "vpc_id" {
   description = "The ID for the VPC."
   type        = string
+  default     = ""
 }
 
 variable "subnet_id" {
   description = "ID for the Subnet."
   type        = string
+  default     = ""
 }
 
 variable "ec2_security_group_id" {
   description = "The ID of the EC2 security group."
   type        = string
+  default     = ""
 }
 
 # SSH
@@ -91,3 +95,11 @@ variable "ssh_key_name" {
   type        = string
   default     = ""
 }
+
+
+variable "is_public" {
+  description = "is public"
+  type        = bool
+  default     = false
+}
+

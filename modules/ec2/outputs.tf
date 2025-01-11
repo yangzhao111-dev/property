@@ -1,8 +1,11 @@
-output "values" {
-  value = module.asg
+output "instance_id" {
+  value = module.ec2.id
 }
 
-output "ssh_private_key" {
-  value     = tls_private_key.ssh.*.private_key_pem
-  sensitive = true
+output "private_ip" {
+  value = module.ec2.private_ip
+}
+
+output "public_ip" {
+  value = var.is_public ? aws_eip.public_ip[0].public_ip : "No Public IP"
 }
