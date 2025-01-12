@@ -15,6 +15,22 @@ module "ec2" {
 
   associate_public_ip_address = var.is_public
 
+ 
+  root_block_device = var.root_block_device
+ 
+  user_data = <<-EOT
+              <powershell>
+              # 获取附加的磁盘
+              $disk = Get-Disk | Where-Object { $_.OperationalStatus -eq 'Offline' }
+              # 初始化磁盘并将其格式化为 NTFS
+              $disk | Set-Disk -IsOffline $false -IsReadOnly $false
+              $partition = New-Partition -DiskNumber $disk.Number -UseMaximumSize -AssignDriveLetter
+              Format-Volume -DriveLetter $partition.DriveLetter -FileSystem NTFS -Confirm:$false
+              </powershell>
+              EOT
+
+  ebs_block_device = var.ebs_block_device
+
   tags = var.tags
 }
 
@@ -24,3 +40,7 @@ resource "aws_eip" "public_ip" {
   instance = module.ec2.id
 }
 
+output "is_public" {
+  description = "The list of extra disks to be attached."
+  value       = var.is_public
+}
