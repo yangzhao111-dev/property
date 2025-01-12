@@ -71,12 +71,19 @@ asgs = {
 
 ec2s = {
   app-bastion = {
-    image_id      = "ami-0e32864a4910bd3a9" // Windows 2025
-    instance_type = "t3.medium"
-    disk_size_gb  = 70
-    ssh_key_name  = "instance-access-key" // manuall add key pair
-    vpc_key       = "mgt"
-    is_public     = true
+    image_id             = "ami-0e32864a4910bd3a9" // Windows 2025
+    instance_type        = "t3.micro"
+    root_block_device = [{
+      encrypted   = true
+      volume_type = "gp3"
+      volume_size = 70
+      throughput  = 125
+      iops        = 3000
+    }]
+    extra_disks          = []
+    ssh_key_name         = "instance-access-key" // manuall add key pair
+    vpc_key              = "mgt"
+    is_public            = true
     security_group_ingress_cidr_rules = [
       {
         description = "Michael home"
@@ -123,10 +130,32 @@ ec2s = {
   rds = {
     image_id      = "ami-0e32864a4910bd3a9" // Windows 2025
     instance_type = "t3.medium"
-    disk_size_gb  = 60
-    ssh_key_name  = "instance-access-key" // manuall add key pair
-    vpc_key       = "app"
-    is_public     = false
+    root_block_device = [{
+      encrypted   = true
+      volume_type = "gp3"
+      volume_size = 600
+      throughput  = 600
+      iops        = 3000
+    }]
+    ssh_key_name = "instance-access-key" // manuall add key pair
+    ebs_block_device = [{
+        encrypted   = true
+        device_name = "xvdf"
+        volume_type = "gp3"
+        volume_size = 600
+        throughput  = 600
+        iops        = 3000
+      },
+      {
+        encrypted   = true
+        device_name = "xvdb"
+        volume_type = "gp3"
+        volume_size = 2500
+        throughput  = 600
+        iops        = 3000
+    }]
+    vpc_key   = "app"
+    is_public = false
   }
 }
 

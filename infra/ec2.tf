@@ -15,7 +15,8 @@ module "ec2" {
     ? module.vpc[each.value.vpc_key].values.public_subnets[0]
   : module.vpc[each.value.vpc_key].values.private_subnets[0])
   ssh_key_name = each.value.ssh_key_name
-
+  root_block_device = each.value.root_block_device
+  ebs_block_device = each.value.ebs_block_device
   security_group_ingress_cidr_rules = each.value.security_group_ingress_cidr_rules
 
   tags = merge(local.tags, var.tags, {

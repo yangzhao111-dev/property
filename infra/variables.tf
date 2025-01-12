@@ -100,8 +100,22 @@ variable "ec2s" {
     create        = optional(bool, true)
     image_id      = optional(string, "") // Windows 2025
     instance_type = optional(string, "")
-    disk_size_gb  = optional(number, 60)
-    ssh_key_name  = optional(string, "") // manuall add key pair
+    ssh_key_name   = optional(string, "")
+    root_block_device   = optional(list(object({
+      encrypted = optional(bool, true)
+      volume_type = optional(string, "gp3")
+      volume_size = optional(number, 60)
+      throughput  = optional(number, 125)
+      iops = optional(number, 3000)
+    })), [])
+    ebs_block_device   = optional(list(object({
+      encrypted = optional(bool, true)
+      device_name = optional(string, "xvdb")
+      volume_type = optional(string, "gp3")
+      volume_size = optional(number, 600)
+      throughput  = optional(number, 125)
+      iops = optional(number, 3000)
+    })), [])
     vpc_key       = optional(string, "")
     alb_key       = optional(string, "")
     is_public     = optional(bool, false)
