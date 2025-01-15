@@ -1,5 +1,5 @@
 module "asg" {
-  source = "../modules/asg"
+  source = "../modules/asg" 
 
   for_each = var.asgs
 
@@ -24,6 +24,8 @@ module "asg" {
 
   create_ssh_key = each.value.create_ssh_key
   ssh_key_name   = each.value.ssh_key_name
+
+  scaling_policies = each.value.scaling_policies
 
   tags = merge(local.tags, var.tags, {
     "asg:type" = "${each.key}"
