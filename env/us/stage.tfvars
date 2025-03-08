@@ -58,10 +58,10 @@ asgs = {
     alb_key       = "app-nodejs"
 
     name             = "app-nodejs-prod"
-    min_size         = 1                        
-    max_size         = 20                       
+    min_size         = 1
+    max_size         = 20
     desired_capacity = 7
-    
+
     scaling_policies = [
       {
       policy_name          = "scale-up-app-nodejs-prod-asg"
@@ -81,7 +81,7 @@ asgs = {
       policy_name         = "scale-down-app-nodejs-prod-asg"
       policy_type         = "StepScaling"
       enabled             = true
-      alarm_name          = "TargetTracking-app-nodejs-prod-asg-AlarmLow"      
+      alarm_name          = "TargetTracking-app-nodejs-prod-asg-AlarmLow"
       metric_name         = "CPUUtilization"
       threshold           = 25
       adjustment_type     = "ChangeInCapacity"
@@ -120,7 +120,7 @@ asgs = {
         cooldown            = 180
         evaluation_periods  = 5
         period              = 60
-        comparison_operator = "GreaterThanThreshold" 
+        comparison_operator = "GreaterThanThreshold"
       },
       {
         policy_name         = "scale-down-app-web-prod-asg"
