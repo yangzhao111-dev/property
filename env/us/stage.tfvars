@@ -56,7 +56,44 @@ asgs = {
     ssh_key_name  = "instance-access-key" // manuall add key pair
     vpc_key       = "app"
     alb_key       = "app-nodejs"
+
+    name             = "app-nodejs-prod"
+    min_size         = 1                        
+    max_size         = 20                       
+    desired_capacity = 7
+    
+    scaling_policies = [
+      {
+      policy_name          = "scale-up-app-nodejs-prod-asg"
+      policy_type          = "StepScaling"
+      enabled              = true
+      alarm_name           = "TargetTracking-app-nodejs-prod-asg-AlarmHigh"
+      metric_name          = "CPUUtilization"
+      threshold            = 40
+      adjustment_type      = "ChangeInCapacity"
+      scaling_adjustment   = 1
+      cooldown             = 180
+      evaluation_periods   = 4
+      period               = 60
+      comparison_operator  = "GreaterThanOrEqualToThreshold"
+      },
+      {
+      policy_name         = "scale-down-app-nodejs-prod-asg"
+      policy_type         = "StepScaling"
+      enabled             = true
+      alarm_name          = "TargetTracking-app-nodejs-prod-asg-AlarmLow"      
+      metric_name         = "CPUUtilization"
+      threshold           = 25
+      adjustment_type     = "ChangeInCapacity"
+      scaling_adjustment  = -1
+      cooldown = 180
+      evaluation_periods  = 20
+      period              = 60
+      comparison_operator = "LessThanOrEqualToThreshold"
+      }
+    ]
   }
+
   app-web = {
     image_id      = "ami-0e32864a4910bd3a9" // Windows 2025
     instance_type = "t3.medium"
@@ -64,6 +101,41 @@ asgs = {
     ssh_key_name  = "instance-access-key" // manuall add key pair
     vpc_key       = "app"
     alb_key       = "app-web"
+
+    name             = "app-web-prod"
+    min_size         = 2
+    max_size         = 30
+    desired_capacity = 3
+
+    scaling_policies = [
+      {
+        policy_name         = "scale-up-app-web-prod-asg"
+        policy_type         = "StepScaling"
+        enabled             = true
+        alarm_name          = "TargetTracking-app-web-prod-asg-AlarmHigh"
+        metric_name         = "CPUUtilization"
+        threshold           = 78
+        adjustment_type     = "ChangeInCapacity"
+        scaling_adjustment  = 1
+        cooldown            = 180
+        evaluation_periods  = 5
+        period              = 60
+        comparison_operator = "GreaterThanThreshold" 
+      },
+      {
+        policy_name         = "scale-down-app-web-prod-asg"
+        policy_type         = "StepScaling"
+        enabled             = true
+        alarm_name          = "TargetTracking-app-web-prod-asg-AlarmLow"
+        metric_name         = "CPUUtilization"
+        threshold           = 46
+        adjustment_type     = "ChangeInCapacity"
+        scaling_adjustment  = -1
+        evaluation_periods  = 16
+        period              = 60
+        comparison_operator = "LessThanOrEqualToThreshold"
+      }
+    ]
   }
 }
 

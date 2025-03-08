@@ -89,6 +89,24 @@ variable "asgs" {
     ssh_key_name   = optional(string, "")
     vpc_key        = optional(string, "")
     alb_key        = optional(string, "")
+
+    name             = optional(string,"")
+    desired_capacity = optional(number, 1)
+    
+    scaling_policies = optional(list(object({
+      policy_name         = string
+      policy_type         = optional(string, "StepScaling")
+      enabled             = optional(bool, true)
+      alarm_name          = optional(string)  
+      metric_name         = optional(string, "CPUUtilization")
+      threshold           = optional(number, 20)
+      adjustment_type     = optional(string, "ChangeInCapacity")
+      scaling_adjustment  = optional(number, -1)
+      cooldown            = optional(number, null)
+      evaluation_periods  = optional(number, 2)
+      period              = optional(number, 60)
+      comparison_operator = optional(string, "LessThanOrEqualToThreshold")
+    })),[])
   }))
   default = {}
 }

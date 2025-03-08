@@ -20,6 +20,8 @@ module "asg" {
   vpc_zone_identifier       = var.private_subnets
   service_linked_role_arn   = aws_iam_service_linked_role.autoscaling.arn
 
+  scaling_policies   = var.scaling_policies
+
   # Traffic source attachment
   traffic_source_attachments = {
     ex-alb = {

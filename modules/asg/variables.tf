@@ -61,6 +61,12 @@ variable "disk_size_gb" {
   default     = 10
 }
 
+variable "scaling_policies" {
+  description = "Scale-up,scale-down policy configuration."
+  type        = any
+  default     = []
+}
+
 # SG
 
 variable "management_vpc_cidr" {
