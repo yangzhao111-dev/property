@@ -64,32 +64,31 @@ asgs = {
 
     scaling_policies = [
       {
-      policy_name          = "scale-up-app-nodejs-prod-asg"
-      policy_type          = "StepScaling"
-      enabled              = true
-      alarm_name           = "TargetTracking-app-nodejs-prod-asg-AlarmHigh"
-      metric_name          = "CPUUtilization"
-      threshold            = 40
-      adjustment_type      = "ChangeInCapacity"
-      scaling_adjustment   = 1
-      cooldown             = 180
-      evaluation_periods   = 4
-      period               = 60
-      comparison_operator  = "GreaterThanOrEqualToThreshold"
+        policy_name               = "scale-up-app-nodejs-prod-asg"
+        policy_type               = "StepScaling"
+        enabled                   = true
+        alarm_name                = "TargetTracking-app-nodejs-prod-asg-AlarmHigh"
+        metric_name               = "CPUUtilization"
+        threshold                 = 70
+        adjustment_type           = "ChangeInCapacity"
+        scaling_adjustment        = 1
+        estimated_instance_warmup = 180
+        evaluation_periods        = 5
+        period                    = 60
+        comparison_operator       = "GreaterThanOrEqualToThreshold"
       },
       {
-      policy_name         = "scale-down-app-nodejs-prod-asg"
-      policy_type         = "StepScaling"
-      enabled             = true
-      alarm_name          = "TargetTracking-app-nodejs-prod-asg-AlarmLow"
-      metric_name         = "CPUUtilization"
-      threshold           = 25
-      adjustment_type     = "ChangeInCapacity"
-      scaling_adjustment  = -1
-      cooldown = 180
-      evaluation_periods  = 20
-      period              = 60
-      comparison_operator = "LessThanOrEqualToThreshold"
+        policy_name         = "scale-down-app-nodejs-prod-asg"
+        policy_type         = "StepScaling"
+        enabled             = true
+        alarm_name          = "TargetTracking-app-nodejs-prod-asg-AlarmLow"
+        metric_name         = "CPUUtilization"
+        threshold           = 45
+        adjustment_type     = "ChangeInCapacity"
+        scaling_adjustment  = -1
+        evaluation_periods  = 16
+        period              = 60
+        comparison_operator = "LessThanOrEqualToThreshold"
       }
     ]
   }
@@ -109,18 +108,18 @@ asgs = {
 
     scaling_policies = [
       {
-        policy_name         = "scale-up-app-web-prod-asg"
-        policy_type         = "StepScaling"
-        enabled             = true
-        alarm_name          = "TargetTracking-app-web-prod-asg-AlarmHigh"
-        metric_name         = "CPUUtilization"
-        threshold           = 78
-        adjustment_type     = "ChangeInCapacity"
-        scaling_adjustment  = 1
-        cooldown            = 180
-        evaluation_periods  = 5
-        period              = 60
-        comparison_operator = "GreaterThanThreshold"
+        policy_name               = "scale-up-app-web-prod-asg"
+        policy_type               = "StepScaling"
+        enabled                   = true
+        alarm_name                = "TargetTracking-app-web-prod-asg-AlarmHigh"
+        metric_name               = "CPUUtilization"
+        threshold                 = 76
+        adjustment_type           = "ChangeInCapacity"
+        scaling_adjustment        = 1
+        estimated_instance_warmup = 180
+        evaluation_periods        = 5
+        period                    = 60
+        comparison_operator       = "GreaterThanThreshold"
       },
       {
         policy_name         = "scale-down-app-web-prod-asg"
@@ -143,8 +142,8 @@ asgs = {
 
 ec2s = {
   app-bastion = {
-    image_id             = "ami-0e32864a4910bd3a9" // Windows 2025
-    instance_type        = "t3.micro"
+    image_id      = "ami-0e32864a4910bd3a9" // Windows 2025
+    instance_type = "t3.micro"
     root_block_device = [{
       encrypted   = true
       volume_type = "gp3"
@@ -152,10 +151,10 @@ ec2s = {
       throughput  = 125
       iops        = 3000
     }]
-    extra_disks          = []
-    ssh_key_name         = "instance-access-key" // manuall add key pair
-    vpc_key              = "mgt"
-    is_public            = true
+    extra_disks  = []
+    ssh_key_name = "instance-access-key" // manuall add key pair
+    vpc_key      = "mgt"
+    is_public    = true
     security_group_ingress_cidr_rules = [
       {
         description = "Michael home"
@@ -211,12 +210,12 @@ ec2s = {
     }]
     ssh_key_name = "instance-access-key" // manuall add key pair
     ebs_block_device = [{
-        encrypted   = true
-        device_name = "xvdf"
-        volume_type = "gp3"
-        volume_size = 600
-        throughput  = 600
-        iops        = 3000
+      encrypted   = true
+      device_name = "xvdf"
+      volume_type = "gp3"
+      volume_size = 600
+      throughput  = 600
+      iops        = 3000
       },
       {
         encrypted   = true
