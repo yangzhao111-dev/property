@@ -2,7 +2,7 @@
 
 country        = "us"
 environment    = "stage"
-aws_account_id = "539247459406"
+aws_account_id = "922456365681"
 aws_region     = "us-west-2"
 
 # VPC
