@@ -2,7 +2,7 @@ module "init" {
   source = "../modules/init"
 
   deployer_user       = "RootDeployer"
-  bucket_name         = "ipropertyexpress-tfstates"
+  bucket_name         = "ipropertyexpress-tfstates-test"
   dynamodb_table_name = "ipropertyexpress-tfstates-locktable"
 
   tags = {

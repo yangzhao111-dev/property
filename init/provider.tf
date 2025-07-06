@@ -1,3 +1,3 @@
 provider "aws" {
-  allowed_account_ids = ["539247459406"]
+  allowed_account_ids = ["922456365681"]
 }
