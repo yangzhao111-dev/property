@@ -1,4 +1,4 @@
-name: Terraform Deploy
+name: Terraform CI/CD Pipeline
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
   pull_request:
     branches:
       - main
-  workflow_dispatch:
+  workflow_dispatch:  # 手动触发
 
 env:
   AWS_REGION: us-east-2
@@ -19,22 +19,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout source code
         uses: actions/checkout@v4
 
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v3
         with:
-          terraform_version: 1.6.6  # 修改为你实际使用的版本
+          terraform_version: 1.6.6  # 你项目用的版本
 
-      - name: Configure AWS credentials
+      - name: Set up AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
 
-      - name: Install dependencies
+      - name: Install dependencies (make, unzip)
         run: |
           sudo apt-get update
           sudo apt-get install -y make unzip
@@ -42,7 +42,6 @@ jobs:
       - name: Terraform Init
         run: |
           export COUNTRY=${{ env.COUNTRY }}
-          export AWS_PROFILE=dummy
           export ENVIRONMENT=${{ env.ENVIRONMENT }}
           make init
 
@@ -52,7 +51,7 @@ jobs:
           export ENVIRONMENT=${{ env.ENVIRONMENT }}
           make plan
 
-      - name: Terraform Apply
+      - name: Terraform Apply (only on main branch)
         if: github.ref == 'refs/heads/main'
         run: |
           export COUNTRY=${{ env.COUNTRY }}
