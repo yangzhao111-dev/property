@@ -11,7 +11,7 @@ on:
 
 env:
   AWS_REGION: us-east-2
-  AWS_PROFILE: ipe-rootdeployer     # ✅ 必须传给 Makefile
+  AWS_PROFILE: ci-placeholder      # ✅ 必须传给 Makefile
   COUNTRY: us
   ENVIRONMENT: stage
 
