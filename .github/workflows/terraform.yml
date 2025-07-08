@@ -11,11 +11,10 @@ on:
 
 env:
   AWS_REGION: us-east-2
-  AWS_DEFAULT_REGION: us-east-2
-  AWS_PROFILE: ci-placeholder         # 只为绕过 makefile 检查
-  AWS_SDK_LOAD_CONFIG: "false"        # 强制走 secrets，不加载 profile 文件
+  AWS_PROFILE: ipe-rootdeployer
   COUNTRY: us
   ENVIRONMENT: stage
+  AWS_SDK_LOAD_CONFIG: "false"        # 强制走 secrets，不加载 profile 文件
 
 jobs:
   terraform:
@@ -37,6 +36,15 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
 
+      - name: Inject AWS CLI profile for Terraform
+        run: |
+          mkdir -p ~/.aws
+          echo "[${{ env.AWS_PROFILE }}]" > ~/.aws/config
+          echo "region = ${{ env.AWS_REGION }}" >> ~/.aws/config
+          echo "[${{ env.AWS_PROFILE }}]" > ~/.aws/credentials
+          echo "aws_access_key_id = ${{ secrets.AWS_ACCESS_KEY_ID }}" >> ~/.aws/credentials
+          echo "aws_secret_access_key = ${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> ~/.aws/credentials
+
       - name: Install dependencies
         run: |
           sudo apt-get update
@@ -47,6 +55,9 @@ jobs:
 
       - name: Terraform Plan
         run: make plan AWS_PROFILE=${{ env.AWS_PROFILE }} COUNTRY=${{ env.COUNTRY }} ENVIRONMENT=${{ env.ENVIRONMENT }}
+
+      - name: Terraform Output
+        run: make output AWS_PROFILE=${{ env.AWS_PROFILE }} COUNTRY=${{ env.COUNTRY }} ENVIRONMENT=${{ env.ENVIRONMENT }}  
 
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main'
