@@ -1,47 +1,43 @@
-name: Terraform Deployment
+name: Terraform Deploy
 
 on:
   push:
     branches:
       - main
-  pull_request:
+  workflow_dispatch:
 
 env:
   AWS_REGION: us-east-2
+  AWS_PROFILE: ipe-rootdeployer
+  COUNTRY: us
+  ENVIRONMENT: stage
 
 jobs:
   terraform:
-    name: Terraform Init, Plan and Apply
     runs-on: ubuntu-latest
 
-    defaults:
-      run:
-        shell: bash
-        working-directory: init
-
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      - name: Set up Terraform
-        uses: hashicorp/setup-terraform@v3
-        with:
-          terraform_version: 1.6.6
-
-# trigger run456
-      - name: Configure AWS credentials
+      - name: Set up AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
 
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y make unzip
+
       - name: Terraform Init
-        run: terraform init
+        run: make init AWS_PROFILE=${{ env.AWS_PROFILE }} COUNTRY=${{ env.COUNTRY }} ENVIRONMENT=${{ env.ENVIRONMENT }}
 
       - name: Terraform Plan
-        run: terraform plan -var-file=../env/us/stage.tfvars
+        run: make plan AWS_PROFILE=${{ env.AWS_PROFILE }} COUNTRY=${{ env.COUNTRY }} ENVIRONMENT=${{ env.ENVIRONMENT }}
 
       - name: Terraform Apply
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        run: terraform apply -auto-approve -var-file=../env/us/stage.tfvars
+        if: github.ref == 'refs/heads/main'
+        run: make apply AWS_PROFILE=${{ env.AWS_PROFILE }} COUNTRY=${{ env.COUNTRY }} ENVIRONMENT=${{ env.ENVIRONMENT }} APPROVE=true
