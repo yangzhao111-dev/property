@@ -10,12 +10,14 @@ on:
   workflow_dispatch:
 
 env:
+  env:
   AWS_REGION: us-east-2
-  AWS_PROFILE: ci-placeholder      # ✅ 必须传给 Makefile
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  AWS_PROFILE: ci-placeholder              # ⛳️ dummy 传给 Makefile 用
+  AWS_SDK_LOAD_CONFIG: 0                  # ✅ 告诉 Terraform 不要从 profile 加载 config
   COUNTRY: us
   ENVIRONMENT: stage
-  AWS_SDK_LOAD_CONFIG: 0                  # ✅ 告诉 Terraform 不要从 profile 加载 config
-
 
 jobs:
   terraform:
