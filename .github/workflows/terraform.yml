@@ -13,8 +13,8 @@ env:
   env:
   AWS_REGION: us-east-2
   AWS_DEFAULT_REGION: us-east-2
-  AWS_PROFILE: ""
-  AWS_SDK_LOAD_CONFIG: "false"           # ✅ 核心：禁用 profile 加载
+  AWS_PROFILE: ipe-rootdeployer
+  AWS_SDK_LOAD_CONFIG: "true"           # ✅ 核心：禁用 profile 加载
   COUNTRY: us
   ENVIRONMENT: stage
 
