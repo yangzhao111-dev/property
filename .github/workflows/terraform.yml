@@ -28,7 +28,7 @@ jobs:
         uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: '1.6.6'
-
+# trigger 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
