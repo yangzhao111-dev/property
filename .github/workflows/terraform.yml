@@ -10,7 +10,6 @@ on:
   workflow_dispatch:
 
 env:
-  env:
   AWS_REGION: us-east-2
   AWS_DEFAULT_REGION: us-east-2
   AWS_PROFILE: ipe-rootdeployer
