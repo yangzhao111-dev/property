@@ -11,7 +11,6 @@ on:
 
 env:
   AWS_REGION: us-east-2
-  # AWS_PROFILE: ipe-rootdeployer
   COUNTRY: us
   ENVIRONMENT: stage
 
@@ -26,9 +25,9 @@ jobs:
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v3
         with:
-          terraform_version: 1.0  
+          terraform_version: 1.6.6  # 修改为你实际使用的版本
 
-      - name: Set up AWS credentials
+      - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -38,17 +37,23 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y make
+          sudo apt-get install -y make unzip
 
       - name: Terraform Init
         run: |
-          make init AWS_PROFILE=${{ env.AWS_PROFILE }} COUNTRY=${{ env.COUNTRY }} ENVIRONMENT=${{ env.ENVIRONMENT }}
+          export COUNTRY=${{ env.COUNTRY }}
+          export ENVIRONMENT=${{ env.ENVIRONMENT }}
+          make init
 
       - name: Terraform Plan
         run: |
-          make plan AWS_PROFILE=${{ env.AWS_PROFILE }} COUNTRY=${{ env.COUNTRY }} ENVIRONMENT=${{ env.ENVIRONMENT }}
+          export COUNTRY=${{ env.COUNTRY }}
+          export ENVIRONMENT=${{ env.ENVIRONMENT }}
+          make plan
 
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main'
         run: |
-          make apply AWS_PROFILE=${{ env.AWS_PROFILE }} COUNTRY=${{ env.COUNTRY }} ENVIRONMENT=${{ env.ENVIRONMENT }} APPROVE=true
+          export COUNTRY=${{ env.COUNTRY }}
+          export ENVIRONMENT=${{ env.ENVIRONMENT }}
+          make apply APPROVE=true
