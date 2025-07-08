@@ -14,6 +14,8 @@ env:
   AWS_PROFILE: ci-placeholder      # ✅ 必须传给 Makefile
   COUNTRY: us
   ENVIRONMENT: stage
+  AWS_SDK_LOAD_CONFIG: 0                  # ✅ 告诉 Terraform 不要从 profile 加载 config
+
 
 jobs:
   terraform:
