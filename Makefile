@@ -1,6 +1,6 @@
 MISSING_ARGS = $(shell for x in '$(AWS_PROFILE)' '$(COUNTRY)' '$(ENVIRONMENT)' ; \
 	do [ \"$$x\" = \"\" ] && echo 1 ; done)
-MISSING_ARGS_TGW = $(shell for x in '$(AWS_PROFILE)' ; \
+MISSING_ARGS_AWS_PROFILE = $(shell for x in '$(AWS_PROFILE)' ; \
 	do [ \"$$x\" = \"\" ] && echo 1 ; done)
 
 ENV_VARS = AWS_PROFILE=$(AWS_PROFILE)
@@ -53,7 +53,7 @@ help: ## Prints this help
 .PHONY: check-args
 check-args:
 ifeq ($(VPC_TGW),true)
-ifneq ($(MISSING_ARGS_TGW),)
+ifneq ($(MISSING_ARGS_AWS_PROFILE),)
 	$(error Missing required argument: AWS_PROFILE)
 endif
 else
@@ -62,13 +62,27 @@ ifneq ($(MISSING_ARGS),)
 endif
 endif
 
+.PHONY: check-args-aws-profile
+check-args-aws-profile:
+ifneq ($(MISSING_ARGS_AWS_PROFILE),)
+	$(error Missing required argument: AWS_PROFILE)
+endif
+
 .PHONY: init
 init: check-args ## Init states, use UPGRADE=true for reconfigure
 	$(eval OPTIONS = -backend-config=$(BACKEND_CONFIG))
-ifeq (${UPGRADE},true)
+ifeq (${RECONFIG},true)
 	$(eval OPTIONS += -reconfigure)
 endif
+ifeq (${UPGRADE},true)
+	$(eval OPTIONS += -upgrade)
+endif
 	@$(call terraform_cmd, init, $(ENV_VARS), $(FLAGS), $(OPTIONS))
+
+.PHONY: providers
+providers: check-args-aws-profile ## Check providers
+	$(eval OPTIONS = )
+	@$(call terraform_cmd, providers, $(ENV_VARS), $(FLAGS), $(OPTIONS))
 
 .PHONY: plan
 plan: check-args ## Plan resources
@@ -86,6 +100,5 @@ endif
 	@$(call terraform_cmd, apply, $(ENV_VARS), $(FLAGS), $(OPTIONS))
 
 .PHONY: destroy
-
 destroy: check-args ## Destroy resources
 	@$(call terraform_cmd, destroy, $(ENV_VARS), $(FLAGS), $(OPTIONS))
