@@ -2,7 +2,7 @@
 # https://github.com/terraform-aws-modules/terraform-aws-autoscaling
 module "asg" {
   source  = "terraform-aws-modules/autoscaling/aws"
-  version = "~> 8.0"
+  version = "~> 9.0"
 
   # Autoscaling group
   name            = "${var.name}-asg"
