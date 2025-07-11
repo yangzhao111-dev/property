@@ -126,7 +126,7 @@ variable "ec2s" {
       throughput  = optional(number, 125)
       iops = optional(number, 3000)
     })), [])
-    ebs_block_device   = optional(list(object({
+    ebs_volumes   = optional(list(object({  //new name
       encrypted = optional(bool, true)
       device_name = optional(string, "xvdb")
       volume_type = optional(string, "gp3")
@@ -134,6 +134,7 @@ variable "ec2s" {
       throughput  = optional(number, 125)
       iops = optional(number, 3000)
     })), [])
+    
     vpc_key       = optional(string, "")
     alb_key       = optional(string, "")
     is_public     = optional(bool, false)

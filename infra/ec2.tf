@@ -16,7 +16,12 @@ module "ec2" {
   : module.vpc[each.value.vpc_key].values.private_subnets[0])
   ssh_key_name = each.value.ssh_key_name
   root_block_device = each.value.root_block_device
-  ebs_block_device = each.value.ebs_block_device
+
+  # ebs_block_device = each.value.ebs_block_device
+
+  #aws provider 6 new name: ebs_block_device_mappings
+  ebs_volumes = each.value.ebs_volumes
+
   security_group_ingress_cidr_rules = each.value.security_group_ingress_cidr_rules
 
   tags = merge(local.tags, var.tags, {

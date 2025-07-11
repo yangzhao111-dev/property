@@ -3,7 +3,7 @@ module "s3_bucket" {
 
   for_each = var.s3_buckets
 
-  bucket_name = "${local.s3_name_prefix}.${each.value.bucket_name}"
+  bucket_name = "${local.s3_name_prefix}-${each.value.bucket_name}"
   control_object_ownership = each.value.control_object_ownership
   object_ownership         = each.value.object_ownership
   acl                      = each.value.acl

@@ -209,7 +209,7 @@ ec2s = {
       iops        = 3000
     }]
     ssh_key_name = "instance-access-key" // manuall add key pair
-    ebs_block_device = [{
+    ebs_volumes = [{   // new name
       encrypted   = true
       device_name = "xvdf"
       volume_type = "gp3"

@@ -29,7 +29,8 @@ module "ec2" {
               </powershell>
               EOT
 
-  ebs_block_device = var.ebs_block_device
+  # ebs_block_device = var.ebs_block_device
+  ebs_volumes = var.ebs_volumes  // v6 new name
 
   tags = var.tags
 }

@@ -131,3 +131,19 @@ variable "ebs_block_device" {
   }))
   default = [] # 默认没有传递额外磁盘
 }
+
+# tf aws 6.0 upgrade
+variable "ebs_volumes" {
+  description = "Map of additional EBS volumes to attach"
+  type = map(object({
+    device_name           = optional(string)
+    type                  = optional(string)
+    size                  = optional(number)
+    delete_on_termination = optional(bool)
+    encrypted             = optional(bool)
+    iops                  = optional(number)
+    throughput            = optional(number)
+    tags                  = optional(map(string))
+  }))
+  default = {}
+}
