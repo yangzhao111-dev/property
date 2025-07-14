@@ -18,9 +18,7 @@ module "ec2" {
   root_block_device = each.value.root_block_device
 
   # ebs_block_device = each.value.ebs_block_device
-
-  #aws provider 6 new name: ebs_block_device_mappings
-  ebs_volumes = each.value.ebs_volumes
+  ebs_volumes = each.value.ebs_volumes   // aws provider v6 new name
 
   security_group_ingress_cidr_rules = each.value.security_group_ingress_cidr_rules
 

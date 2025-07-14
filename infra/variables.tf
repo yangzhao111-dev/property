@@ -93,7 +93,7 @@ variable "asgs" {
     name             = optional(string,"")
     desired_capacity = optional(number, 1)
     
-    scaling_policies = optional(list(object({
+    scaling_policies = optional(map(object({
       policy_name         = string
       policy_type         = optional(string, "StepScaling")
       enabled             = optional(bool, true)
@@ -106,7 +106,7 @@ variable "asgs" {
       evaluation_periods  = optional(number, 2)
       period              = optional(number, 60)
       comparison_operator = optional(string, "LessThanOrEqualToThreshold")
-    })),[])
+    })),{})
   }))
   default = {}
 }
@@ -119,21 +119,23 @@ variable "ec2s" {
     image_id      = optional(string, "") // Windows 2025
     instance_type = optional(string, "")
     ssh_key_name   = optional(string, "")
-    root_block_device   = optional(list(object({
+
+    root_block_device   = optional(object({
       encrypted = optional(bool, true)
       volume_type = optional(string, "gp3")
       volume_size = optional(number, 60)
       throughput  = optional(number, 125)
       iops = optional(number, 3000)
-    })), [])
-    ebs_volumes   = optional(list(object({  //new name
+    }), null)
+
+    ebs_volumes   = optional(map(object({
       encrypted = optional(bool, true)
       device_name = optional(string, "xvdb")
-      volume_type = optional(string, "gp3")
-      volume_size = optional(number, 600)
+      type = optional(string, "gp3")
+      size = optional(number, 600)
       throughput  = optional(number, 125)
       iops = optional(number, 3000)
-    })), [])
+    })), {})
     
     vpc_key       = optional(string, "")
     alb_key       = optional(string, "")
@@ -202,3 +204,8 @@ variable "extra_route_tables_for_tgw" {
   }))
   default = {}
 }
+
+# variable "aws_region" {
+#   description = "AWS region"
+#   type        = string
+# }

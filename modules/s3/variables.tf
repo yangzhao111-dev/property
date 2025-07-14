@@ -42,3 +42,8 @@ variable "object_ownership" {
   type        = string
   default     = "BucketOwnerEnforced"
 }
+
+variable "aws_region" {
+  description = "AWS region, for s3/main.tf: region"
+  type        = string
+}

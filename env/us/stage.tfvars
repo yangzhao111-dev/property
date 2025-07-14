@@ -62,8 +62,8 @@ asgs = {
     max_size         = 20
     desired_capacity = 7
 
-    scaling_policies = [
-      {
+    scaling_policies = {
+      scale_up = {
         policy_name               = "scale-up-app-nodejs-prod-asg"
         policy_type               = "StepScaling"
         enabled                   = true
@@ -77,7 +77,7 @@ asgs = {
         period                    = 60
         comparison_operator       = "GreaterThanOrEqualToThreshold"
       },
-      {
+      scale_down = {
         policy_name         = "scale-down-app-nodejs-prod-asg"
         policy_type         = "StepScaling"
         enabled             = true
@@ -90,7 +90,7 @@ asgs = {
         period              = 60
         comparison_operator = "LessThanOrEqualToThreshold"
       }
-    ]
+    }
   }
 
   app-web = {
@@ -106,8 +106,8 @@ asgs = {
     max_size         = 30
     desired_capacity = 3
 
-    scaling_policies = [
-      {
+    scaling_policies = {
+      scale_up = {
         policy_name               = "scale-up-app-web-prod-asg"
         policy_type               = "StepScaling"
         enabled                   = true
@@ -121,7 +121,7 @@ asgs = {
         period                    = 60
         comparison_operator       = "GreaterThanThreshold"
       },
-      {
+      scale_dow = {
         policy_name         = "scale-down-app-web-prod-asg"
         policy_type         = "StepScaling"
         enabled             = true
@@ -134,7 +134,7 @@ asgs = {
         period              = 60
         comparison_operator = "LessThanOrEqualToThreshold"
       }
-    ]
+    }
   }
 }
 
@@ -144,13 +144,15 @@ ec2s = {
   app-bastion = {
     image_id      = "ami-0e32864a4910bd3a9" // Windows 2025
     instance_type = "t3.micro"
-    root_block_device = [{
+    
+    #root block device: object
+    root_block_device = {
       encrypted   = true
       volume_type = "gp3"
       volume_size = 70
       throughput  = 125
       iops        = 3000
-    }]
+    }
     extra_disks  = []
     ssh_key_name = "instance-access-key" // manuall add key pair
     vpc_key      = "mgt"
@@ -201,30 +203,32 @@ ec2s = {
   rds = {
     image_id      = "ami-0e32864a4910bd3a9" // Windows 2025
     instance_type = "t3.medium"
-    root_block_device = [{
+    root_block_device = {
       encrypted   = true
       volume_type = "gp3"
       volume_size = 600
       throughput  = 600
       iops        = 3000
-    }]
+    }
     ssh_key_name = "instance-access-key" // manuall add key pair
-    ebs_volumes = [{   // new name
-      encrypted   = true
-      device_name = "xvdf"
-      volume_type = "gp3"
-      volume_size = 600
-      throughput  = 600
-      iops        = 3000
-      },
-      {
+    ebs_volumes = {
+      xvdf = {   // new name
         encrypted   = true
-        device_name = "xvdb"
-        volume_type = "gp3"
-        volume_size = 2500
+        device_name = "xvdf"
+        type = "gp3"
+        size        = 600
         throughput  = 600
         iops        = 3000
-    }]
+      },
+      xvdb = {
+        encrypted   = true
+        device_name = "xvdb"
+        type        = "gp3"
+        size        = 2500
+        throughput  = 600
+        iops        = 3000
+      }
+    }
     vpc_key   = "app"
     is_public = false
   }
@@ -414,16 +418,17 @@ tgw_attached_vpcs = {
   }
 }
 
+
 // key is VPC key
 extra_route_tables_for_tgw = {
-  mgt = {
-    cidrs = [
-      "10.91.0.0/16",
-    ]
-  },
-  app = {
-    cidrs = [
-      "10.21.0.0/16",
-    ]
-  },
+  # mgt = {
+  #   # cidrs = [
+  #   #   "10.91.0.0/16",
+  #   # ]
+  # },
+  # app = {
+  #   # cidrs = [
+  #   #   "10.21.0.0/16",
+  #   # ]
+  # },
 }

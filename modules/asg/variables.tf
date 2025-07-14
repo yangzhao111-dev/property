@@ -64,7 +64,7 @@ variable "disk_size_gb" {
 variable "scaling_policies" {
   description = "Scale-up,scale-down policy configuration."
   type        = any
-  default     = []
+  default     = {}
 }
 
 # SG

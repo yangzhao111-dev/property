@@ -107,16 +107,17 @@ variable "security_group_ingress_cidr_rules" {
   default = []
 }
 
+# v6+ map
 variable "root_block_device" {
   description = "The sizes of the extra disks to attach to the instance (in GB). Leave empty for no extra disks."
-  type = list(object({
+  type = object({
     encrypted = optional(bool, true)
     volume_type = optional(string, "gp3")
     volume_size = optional(number, 600)
     throughput  = optional(number, 125)
     iops  = optional(number, 3000)
-  }))
-  default = [] # 默认没有传递额外磁盘
+  })
+  default = null # 默认没有传递额外磁盘
 }
 
 variable "ebs_block_device" {
